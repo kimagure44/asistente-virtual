@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+        <meta charset="utf-8">        
+        <meta name="author" content="Iván">
+        <meta name="description" content="IGOR">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="msapplication-tap-highlight" content="no">
+        <title>IGOR</title>
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,400italic,700,700italic' rel='stylesheet'>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        <style>
+            body
+            {
+                font-family: 'Montserrat', sans-serif;
+                overflow: hidden;
+            }
+            #barraMenu 
+            {
+                position: fixed;
+                width: 100%;
+                top: calc(100% - 90px);
+                height: 80px;
+                left: 0;
+                list-style: none;
+                display: none;
+            }
+            #barraMenu li 
+            {
+                float: left;
+                width: 25%;
+                text-align: center;
+            }   
+            #barraMenu li span 
+            {
+                text-shadow: 1px 1px 6px #000000;
+                color: #ffffff;
+                font-size: 50px;
+            }
+            #barraMenu li span 
+            {
+                user-select: none;
+            }
+            .screen 
+            {
+                position: absolute;
+                display: none;
+                width: 100%;
+            }
+            .btnLogotipoInicio
+            {
+                border-radius: 200px 200px 200px 200px;
+                -moz-border-radius: 200px 200px 200px 200px;
+                -webkit-border-radius: 200px 200px 200px 200px;
+                width: 200px;
+                height: 200px;
+                left: calc(50% - 100px);
+                position: absolute;
+                top: calc(50% - 100px);
+            }
+            .btnLogotipoInicio > img 
+            {
+                width: 120px !important;
+                height: auto !important;
+                margin-left: 40px;
+                margin-top: 40px;
+            }
+        </style>
+    </head>
+    <body>    
+        <div class="btnLogotipoInicio blue animated">
+            <img src="logo.png" />
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <ul id="barraMenu" class="blue z-depth-5 animated ">
+                    <li><span class="animated" data-opcion="GPS">GPS</span></li>
+                    <li><span class="animated" data-opcion="AUDIO">Audio</span></li>
+                    <li><span class="animated" data-opcion="VIDEO">Video</span></li>
+                    <li><span class="animated" data-opcion="RADIO">Radio</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row animated screen" id="gps">
+            <div class="col s12">
+                <div class="card blue">
+                    <div class="card-content white-text">
+                        <span class="card-title">GPS</span>
+                        <p>I am a very simple card. I am good at containing small bits of information.
+                        I am convenient because I require little markup to use effectively.</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="#">This is a link</a>
+                        <a class="volver">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row animated screen" id="audio">
+            <div class="col s12">
+                <div class="card blue">
+                    <div class="card-content white-text">
+                        <span class="card-title">Audio</span>
+                        <p>I am a very simple card. I am good at containing small bits of information.
+                        I am convenient because I require little markup to use effectively.</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="#">This is a link</a>
+                        <a class="volver">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row animated screen" id="video">
+            <div class="col s12">
+                <div class="card blue">
+                    <div class="card-content white-text">
+                        <span class="card-title">Video</span>
+                        <p>I am a very simple card. I am good at containing small bits of information.
+                        I am convenient because I require little markup to use effectively.</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="#">This is a link</a>
+                        <a class="volver">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row animated screen" id="radio">
+            <div class="col s12">
+                <div class="card blue">
+                    <div class="card-content white-text">
+                        <span class="card-title">Radio</span>
+                        <p>I am a very simple card. I am good at containing small bits of information.
+                        I am convenient because I require little markup to use effectively.</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="#">This is a link</a>
+                        <a class="volver">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+        <script>
+            var IGOR = IGOR || {};
+            IGOR.variables =
+            {
+                
+            };
+            IGOR.metodos =
+            {
+                menu: function()
+                {
+                    
+                    $(".btnLogotipoInicio").off("click").on("click", function()
+                    {
+                        $(".btnLogotipoInicio").addClass("bounceOutUp");
+                        $('.btnLogotipoInicio').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function()
+                        {
+                            $("#barraMenu").addClass("bounceInUp");
+                            $("#barraMenu").show();
+                            IGOR.metodos.eventos();
+                        });    
+                    })
+                },
+                eventos: function()
+                {
+                    $("#barraMenu li").off("click").on("click", function()
+                    {
+                        debugger;
+                        $(".screen.bounceInUp").removeClass("bounceInUp").addClass("bounceOutDown");
+                        $("#barraMenu.bounceInUp").removeClass("bounceInUp").addClass("bounceOutDown");
+                        if (/GPS/.test($(this).children("span").attr("data-opcion")))
+                        {
+                            $("#gps").removeClass("bounceOutDown").addClass("bounceInUp");
+                            $("#gps").show();
+                        }
+                        if (/AUDIO/.test($(this).children("span").attr("data-opcion")))
+                        {
+                            $("#audio").removeClass("bounceOutDown").addClass("bounceInUp");
+                            $("#audio").show();
+                        }
+                        if (/VIDEO/.test($(this).children("span").attr("data-opcion")))
+                        {
+                            $("#video").removeClass("bounceOutDown").addClass("bounceInUp");
+                            $("#video").show();
+                        }
+                        if (/RADIO/.test($(this).children("span").attr("data-opcion")))
+                        {
+                            $("#radio").removeClass("bounceOutDown").addClass("bounceInUp");
+                            $("#radio").show();
+                        }
+                        
+                    })
+                    $(".volver").off("click").on("click", function()
+                    {
+                        $(this).parent().parent().parent().parent().removeClass("bounceInUp").addClass("bounceOutDown");
+                        $("#barraMenu").removeClass("bounceOutDown").addClass("bounceInUp");
+                    })
+                }
+            };
+            $(document).ready(function()
+            {
+                IGOR.metodos.menu();
+            })
+        </script>
+    </body>
+</html>
