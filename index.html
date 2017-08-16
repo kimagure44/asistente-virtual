@@ -9,9 +9,11 @@
         <meta name="msapplication-tap-highlight" content="no">
         <title>IGOR</title>
         <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,300italic,400italic,700,700italic' rel='stylesheet'>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+        <link rel="stylesheet" href="css/materialize.min.css">
         <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        <link rel="stylesheet" href="css/animate.min.css">
+        <link rel="stylesheet" href="css/alertify.css">
+        <script src="js/artyom.min.js"></script>
         <style>
             body
             {
@@ -22,23 +24,28 @@
             {
                 position: fixed;
                 width: 100%;
-                top: calc(100% - 90px);
-                height: 80px;
+                top: calc(100% - 60px);
+                height: 50px;
                 left: 0;
                 list-style: none;
                 display: none;
             }
+            #mapa 
+            {
+	            width: 100%;
+                height: 200px;
+            }
             #barraMenu li 
             {
                 float: left;
-                width: 25%;
+                width: 20%;
                 text-align: center;
             }   
             #barraMenu li span 
             {
                 text-shadow: 1px 1px 6px #000000;
                 color: #ffffff;
-                font-size: 50px;
+                font-size: 30px;
             }
             #barraMenu li span 
             {
@@ -77,10 +84,11 @@
         <div class="row">
             <div class="col-xs-12">
                 <ul id="barraMenu" class="blue z-depth-5 animated ">
-                    <li><span class="animated" data-opcion="GPS">GPS</span></li>
-                    <li><span class="animated" data-opcion="AUDIO">Audio</span></li>
-                    <li><span class="animated" data-opcion="VIDEO">Video</span></li>
-                    <li><span class="animated" data-opcion="RADIO">Radio</span></li>
+                    <li><span class="animated" data-opcion="gps">GPS</span></li>
+                    <li><span class="animated" data-opcion="audio">Audio</span></li>
+                    <li><span class="animated" data-opcion="video">Video</span></li>
+                    <li><span class="animated" data-opcion="fotos">Fotos</span></li>
+                    <li><span class="animated" data-opcion="radio">Radio</span></li>
                 </ul>
             </div>
         </div>
@@ -88,9 +96,7 @@
             <div class="col s12">
                 <div class="card blue">
                     <div class="card-content white-text">
-                        <span class="card-title">GPS</span>
-                        <p>I am a very simple card. I am good at containing small bits of information.
-                        I am convenient because I require little markup to use effectively.</p>
+                        <iframe id="mapa" frameborder="0"></iframe>
                     </div>
                     <div class="card-action">
                         <a href="#">This is a link</a>
@@ -129,6 +135,21 @@
                 </div>
             </div>
         </div>
+        <div class="row animated screen" id="fotos">
+            <div class="col s12">
+                <div class="card blue">
+                    <div class="card-content white-text">
+                        <span class="card-title">Fotos</span>
+                        <p>I am a very simple card. I am good at containing small bits of information.
+                        I am convenient because I require little markup to use effectively.</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="#">This is a link</a>
+                        <a class="volver">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row animated screen" id="radio">
             <div class="col s12">
                 <div class="card blue">
@@ -144,16 +165,135 @@
                 </div>
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+        <script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/materialize.min.js"></script>
+        <script src="js/alertify.js"></script>
         <script>
             var IGOR = IGOR || {};
             IGOR.variables =
             {
-                
+                mensajesIGOR:
+                {
+                    ayudar: '¿En que puedo ayudarle?',
+                    saludo:
+                    {
+                        buenosDias: 'Buenos dias señor, ',
+                        buenasTardes: 'Buenas tardes señor, ',
+                        buenasNoches: 'Buenas noches señor, '
+                    },
+                    ir: 'Abriendo ',
+                    menu: false,
+                    map: null
+                }
             };
             IGOR.metodos =
             {
+                init: function()
+                {
+                    IGOR.metodos.startContinuousArtyom();
+                    IGOR.metodos.menu();
+                },
+                startContinuousArtyom: function()
+                {
+                    var listadoComandos = [
+                    {
+                        description:"",
+                        smart: true, // Activar comando como un comando smart para poder usar comodines
+                        indexes: ['ir a *','abrir *','calcula la ruta desde *'],
+                        action: function(i,wildcard)
+                        {
+                            alert(i);
+                            if (i==0 || i==1)
+                            {
+                                if (/menú/.test(wildcard))
+                                {
+                                    if (!IGOR.variables.mensajesIGOR.menu)
+                                    {
+                                        IGOR.variables.mensajesIGOR.menu = true;
+                                        IGOR.metodos.comandosVoz("menú");            
+                                    }
+                                }
+                                if (/gps/.test(wildcard) && IGOR.variables.mensajesIGOR.menu)
+                                {
+                                    IGOR.metodos.comandosVoz("gps");            
+                                }
+                                if ((/audio/.test(wildcard) || /música/.test(wildcard)) && IGOR.variables.mensajesIGOR.menu)
+                                {
+                                    IGOR.metodos.comandosVoz("audio");            
+                                }
+                                if (/vídeo/.test(wildcard) && IGOR.variables.mensajesIGOR.menu)
+                                {
+                                    IGOR.metodos.comandosVoz("video");            
+                                }
+                                if (/radio/.test(wildcard) && IGOR.variables.mensajesIGOR.menu)
+                                {
+                                    IGOR.metodos.comandosVoz("radio");            
+                                }
+                                if (/fotos/.test(wildcard) && IGOR.variables.mensajesIGOR.menu)
+                                {
+                                    IGOR.metodos.comandosVoz("fotos");            
+                                }
+                            }
+                            if (i==2)
+                            {
+                                if (IGOR.variables.mensajesIGOR.menu)
+                                {
+
+                                }
+                            }
+                        }
+                    },
+                    {
+                        indexes: ['volver','atras'],
+                        action: function(i)
+                        {
+                            if (IGOR.variables.mensajesIGOR.menu)
+                            {
+                                IGOR.metodos.comandosVoz("volver");
+                            }
+                        }
+                    }];      
+
+                    artyom.addCommands(listadoComandos);
+                    
+                    // Detener cualquier instancia previa
+                    artyom.fatality();
+                    
+                    setTimeout(function()
+                    {
+                        // Esperar 250ms para inicializar
+                        // Start the commands !
+                        artyom.initialize(
+                        {
+                            lang: "es-ES", // GreatBritain english
+                            continuous: true, // Listen forever
+                            soundex: true,// Use the soundex algorithm to increase accuracy
+                            debug: true, // Show messages in the console
+                            executionKeyword: "ahora",
+                            listen: true // Start to listen commands !
+                        }).then(() => 
+                        {
+                            console.log("Artyom has been succesfully initialized");
+                        }).catch((err) => 
+                        {
+                            console.error("Artyom couldn't be initialized: ", err);
+                        });
+                    },250);
+                },
+                comandosVoz: function(donde)
+                {
+                    var msn = IGOR.variables.mensajesIGOR.ir + donde;
+                    //alertify.logPosition("top right");
+                    //alertify.delay(10000).log(msn);
+                    //artyom.say(msn);
+                    if (donde == "menú") { $(".btnLogotipoInicio").click(); }
+                    if (donde == "gps" || donde == "mapa") { $("#barraMenu li span[data-opcion='gps']").parent().click(); }
+                    if (donde == "audio") { $("#barraMenu li span[data-opcion='audio']").parent().click(); }
+                    if (donde == "video") { $("#barraMenu li span[data-opcion='video']").parent().click(); }
+                    if (donde == "radio") { $("#barraMenu li span[data-opcion='radio']").parent().click(); }
+                    if (donde == "fotos") { $("#barraMenu li span[data-opcion='fotos']").parent().click(); }
+                    if (donde == "volver") { $(".volver").click(); } 
+                },
                 menu: function()
                 {
                     
@@ -175,22 +315,27 @@
                         debugger;
                         $(".screen.bounceInUp").removeClass("bounceInUp").addClass("bounceOutDown");
                         $("#barraMenu.bounceInUp").removeClass("bounceInUp").addClass("bounceOutDown");
-                        if (/GPS/.test($(this).children("span").attr("data-opcion")))
+                        if (/gps/.test($(this).children("span").attr("data-opcion")))
                         {
                             $("#gps").removeClass("bounceOutDown").addClass("bounceInUp");
                             $("#gps").show();
                         }
-                        if (/AUDIO/.test($(this).children("span").attr("data-opcion")))
+                        if (/audio/.test($(this).children("span").attr("data-opcion")))
                         {
                             $("#audio").removeClass("bounceOutDown").addClass("bounceInUp");
                             $("#audio").show();
                         }
-                        if (/VIDEO/.test($(this).children("span").attr("data-opcion")))
+                        if (/video/.test($(this).children("span").attr("data-opcion")))
                         {
                             $("#video").removeClass("bounceOutDown").addClass("bounceInUp");
                             $("#video").show();
                         }
-                        if (/RADIO/.test($(this).children("span").attr("data-opcion")))
+                        if (/fotos/.test($(this).children("span").attr("data-opcion")))
+                        {
+                            $("#fotos").removeClass("bounceOutDown").addClass("bounceInUp");
+                            $("#fotos").show();
+                        }
+                        if (/radio/.test($(this).children("span").attr("data-opcion")))
                         {
                             $("#radio").removeClass("bounceOutDown").addClass("bounceInUp");
                             $("#radio").show();
@@ -206,7 +351,8 @@
             };
             $(document).ready(function()
             {
-                IGOR.metodos.menu();
+                IGOR.metodos.init();
+                
             })
         </script>
     </body>
